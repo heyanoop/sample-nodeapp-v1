@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: myapp-rollout
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+      - name: myapp
+        image: heyanoop/bluegreen:1
+        ports:
+        - containerPort: 8080
+  strategy:
+    blueGreen:
+      activeService: myapp-active
+      previewService: myapp-preview
+      autoPromotionEnabled: false
